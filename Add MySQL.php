@@ -1,0 +1,281 @@
+<?php
+    $server = $_POST['server1'];
+    $name = $_POST['Name'];
+    $password = $_POST['password'];
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<script language="JavaScript" type="text/javascript">
+function display()
+{
+     var x=document.getElementById("type").selectedIndex;
+     if (document.getElementsByTagName("option")[x].value == "ipv4")
+     {
+         alert("Format is 0.0.0.0/00 \n Must be within the IP Range (Each octet is be within the IP Range (Each octet is between 0-255) \n Netmask must be under 25");
+         input.Address.value = "0.0.0.0/00";
+     }
+     else if (document.getElementsByTagName("option")[x].value == "mac-address")
+     {
+         alert("Format is 00:00:00:00:00:00");
+         input.Address.value = "00:00:00:00:00:00";
+     }
+     else if (document.getElementsByTagName("option")[x].value == "hostname")
+     {
+        alert("Format is a site like \"www.somesite.com\"");
+        input.Address.value = "";
+     }
+}
+
+function randomMAC(frm)
+{
+     var hex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+     var address = "";
+     for (var i=0;i<6;i++)
+     {
+          var first = Math.floor(Math.random()*hex.length);
+          var second = Math.floor(Math.random()*hex.length);
+          address = address + hex[first] + hex[second];
+          if(i<5)
+          {
+             address = address + ":";
+          }
+     }
+     frm.Address.value = address;
+}
+
+function randomAddress(frm)
+{
+     var x=document.getElementById("type").selectedIndex;
+     if (document.getElementsByTagName("option")[x].value == "ipv4")
+     { 
+         frm.Address.value = "10.1." + Math.floor(Math.random()*17) + "." + Math.floor(Math.random()*256) + "/16";
+     }
+     else if (document.getElementsByTagName("option")[x].value == "mac-address")
+     {
+         randomMAC(frm);
+     }
+     else if (document.getElementsByTagName("option")[x].value == "hostname")
+     {
+         frm.Address.value = "";
+         alert("Unable to create a random \"hostname\" address");
+     }
+}
+</script>
+
+<script language="JavaScript" type="text/javascript">
+function add()
+{
+     var name = input.Name.value;
+     var type = document.getElementsByTagName("option")[document.getElementById("type").selectedIndex].value;
+     var address = input.Address.value;
+     var okay = false;
+     var unique = true;
+     for(i=0; i<document.getElementById("Addresses").length; i++)
+     {
+           var val = document.getElementById("Addresses")[i].value;
+           var n = val.substring(0,val.indexOf(" "));
+           if(name == n)
+           {
+                unique = false;
+           }   
+     }
+     if (name != "" && type != "" && address != "" && unique)
+     {
+           okay = true;
+     }
+     if(okay)
+     {
+          var item = name + " " + type + " " + address;
+          var newOption = document.createElement("option");
+          newOption.text = item;
+          newOption.value = item;
+          var select = document.getElementById("Addresses");
+          select.add(newOption); 
+          input.Name.value = "";
+          input.Address.value = "";
+     }
+     else if (!unique)
+     {
+             alert("Change name!");
+             input.Name.value = "";
+         }
+     else 
+     {
+             alert("Fill out the information!");
+     }
+}
+</script>
+
+<script language="JavaScript" type="text/javascript">
+function remove()
+{
+  var elSel = document.getElementById('Addresses');
+  var i;
+  for (i = elSel.length - 1; i>=0; i--)
+  {
+    if (elSel.options[i].selected)
+    {
+      elSel.remove(i);
+    }
+  }
+}
+</script>
+
+<script type="text/javascript">
+function displayForm(c)
+{
+     if(c.value == "1")
+     {
+          document.getElementById("file").style.visibility = "visible";
+          document.getElementById("input").style.visibility = "hidden";
+     }
+     else if(c.value =="2")
+     {
+          document.getElementById("file").style.visibility = "hidden";
+          document.getElementById("input").style.visibility = "visible";
+          window.location = document.URL.substring(0,document.URL.indexOf("#")) + '#input1';
+     }
+     else
+     {
+     }
+}
+
+function submitAll1()
+{
+    if (input.tables1.value != "" && input.databases1.value != "" && (document.getElementById("file1").value!='' || file.file2.value != "")) {
+        file.tables.value = document.getElementById("table").value;
+        file.databases.value = document.getElementById("database").value; 
+        document.getElementById("file").submit();
+        file.file2.value = "";
+        document.getElementById("file1").value='';
+        document.getElementById("table").value = "";
+        document.getElementById("database").value = ""; 
+    }
+    else {
+        alert("Fill out the information for \"tables\" and \"database\" or add a file.");
+    }
+}
+
+function submitAll2()
+{
+    var select1 = document.getElementById('Addresses');
+    if (input.tables1.value != "" && input.databases1.value != "" && select1.options.length > 0) {
+        input.tables1.value = document.getElementById("table").value;
+        input.databases1.value = document.getElementById("database").value;
+        var val = new Array();
+        for(var i=0; i < select1.options.length; i++)
+        {
+            val.push(select1.options[i].value);
+        }
+        input.values.value = val.join(";");
+        document.getElementById("Name").disabled = true;
+        document.getElementById("type").disabled = true;
+        document.getElementById("format").disabled = true;
+        document.getElementById("random").disabled = true;
+        document.getElementById("Address").disabled = true;
+        document.getElementById("input").submit();
+        document.getElementById("Name").disabled = false;
+        document.getElementById("type").disabled = false;
+        document.getElementById("format").disabled = false;
+        document.getElementById("random").disabled = false;
+        document.getElementById("Address").disabled = false;
+        input.Name.value = "";
+        input.Address.value = "";
+        document.getElementById("table").value = "";
+        document.getElementById("database").value = "";
+    }
+    else {
+        alert("Fill out the information for \"tables\" and \"database\" (Excluding ones that need to go to the box) or add an address into the box.");
+    }
+}
+
+</script>
+
+<head>
+    <title>Add MySQL</title>
+<style type = "text/css">
+body {
+    background:white;
+    margin: 44px
+}
+div#home {
+    background:gray;
+    color:white;
+    padding:8px;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:5%
+}
+div#head {
+    background:black;
+    color:white;
+    padding:8px;
+    text-align:center;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%
+}
+</style>
+</head>
+<body>
+
+<div id = "head"><b>ADD MySQL</b></div>
+<div id = "home"><a href="http://10.150.12.175/default.html">HOME</a></div>
+
+<p align = "center"><b><u>Input your address here</u></b></p>
+
+<form name = "select" id = "select">
+<p align = "center"><b>Table:</b> <input type = "text" value = "" id = "table" name = "table">
+<p align = "center"><b>Database:</b> <input type = "text" value = "" id = "database" name = "database">
+<p align = "center">
+<input type="radio" name="selection" value="1" onclick = "displayForm(this)">File
+<input type="radio" name="selection" value="2" onclick = "displayForm(this)">Input<br>
+<br></p>
+</form>
+
+<form name = "file" id = "file" action="http://10.150.12.175/webpageMySQL.php" method = "post" style = "visibility:hidden" >
+<p align = "center">
+<input type="file" name="file1" id = "file1" accept="audio/*|video/*|image/*|MIME_type">
+<br></p>
+<p align = "center"><b>Enter file name:</b> <input type = "text" name = "file2" value = "">
+<input type = "button" value = "SUBMIT" onclick = "submitAll1()">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "tables">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "databases">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "add" name = "action1">
+<p align = "center" > <?php echo("<br><input type = 'text' style = 'visibility:hidden' name = 'Names' value = " . $name . ">"); ?>
+<p align = "center" > <?php echo("<br><input type = 'text' style = 'visibility:hidden' name = 'Password' value = " . $password . ">"); ?>
+<p align = "center" > <?php echo("<br><input type = 'text' style = 'visibility:hidden' name = 'Server' value = " . $server . ">"); ?><a name = "input1"></a>
+</form>
+
+<form name = "input" id = "input" action="http://10.150.12.175/webpageMySQL.php" method="post" style =  "visibility:hidden">
+<p align = "center"><b>Name (Add to box):</b> <input type="text" id = "Name" name="Name" value=""><br>
+
+<p align = "center"><b>Type (Add to box):</b> <select name="type", id = "type">
+<option value="ipv4">ipv4</option>
+<option value="mac-address">mac-address</option>
+<option value="hostname">hostname</option>
+</select><button type="button" id = "format" onclick="display()">FORMAT</button><br>
+
+<p align = "center"><b>Address (Add to box):</b> <input type="text" id = "Address" name="Address" value=""><input type= "button" id = "random" value = "RANDOM" onclick = "randomAddress(this.form)"> <br>
+
+
+<p align = "center"><B><u>Addresses</u></B> <br>
+<p align = "center"><select id="Addresses" size="4" multiple = "multiple" style="width:300px">
+</SELECT>
+
+<p align = "center"><input type="button" value="ADD" onclick="add()"><input type="button" value="REMOVE" onclick="remove()"><input type = "button" value = "SUBMIT" onclick = "submitAll2()">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "tables1">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "databases1">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "values">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "add" name = "action2">
+<p align = "center" > <?php echo("<br><input type = 'text' style = 'visibility:hidden' name = 'Names1' value = " . $name . ">"); ?>
+<p align = "center" > <?php echo("<br><input type = 'text' style = 'visibility:hidden' name = 'Password1' value = " . $password . ">"); ?>
+<p align = "center" > <?php echo("<br><input type = 'text' style = 'visibility:hidden' name = 'Server1' value = " . $server . ">"); ?>
+</form>
+
+</body>
+</html>
