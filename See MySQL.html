@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script language="JavaScript" type="text/javascript">
+function display(c)
+{
+     if(c.value == "users" || c.value == "databases")
+     {
+         document.getElementById("table").style.visibility = "hidden";
+         document.getElementById("info").style.visibility = "hidden";
+         document.getElementById("see").style.visibility = "visible";
+     }
+     else if(c.value == "tables")
+     {
+          document.getElementById("table").style.visibility = "visible";
+          document.getElementById("info").style.visibility = "hidden";
+          document.getElementById("see").style.visibility = "hidden";
+     }
+     else if(c.value =="info")
+     {
+          document.getElementById("table").style.visibility = "hidden";
+          document.getElementById("info").style.visibility = "visible";
+          document.getElementById("see").style.bisiblity = "hidden"
+          window.location = document.URL.substring(0,document.URL.indexOf("#")) + '#info1';
+     }
+     else
+     {
+         document.getElementById("table").style.visibility = "hidden";
+         document.getElementById("info").style.visibility = "hidden";
+         document.getElementById("see").style.visibility = "hidden";
+     }
+}
+
+function getSent()
+{
+     var url = document.URL;
+     var queryStart = url.indexOf("?") + 1;
+     var queryEnd = url.length;
+     var query = url.slice(queryStart, queryEnd);
+     if (query === url || query === "") return;
+     var sent = query.split("&");
+     for(var i = 0; i < sent.length; i++)
+     {
+          sent[i] = sent[i].substring(sent[i].indexOf("=")+1);
+     }
+     return sent;
+}
+
+function submitAll1()
+{
+     var sent = getSent();
+     table.Name.value = sent[0];
+     table.Password.value = sent[1];
+     table.Server.value = sent[2];
+     table.type.value = document.getElementById("types").value;
+     document.getElementById("table").submit();
+     table.database.value = "";
+}
+
+function submitAll2()
+{
+     var sent = getSent();
+     info.Name1.value = sent[0];
+     info.Password1.value = sent[1];
+     info.Server1.value = sent[2];
+     info.type1.value = document.getElementById("types").value;
+     document.getElementById("info").submit();
+     info.database1.value = "";
+     info.table1.value = "";
+}
+
+function submitAll3()
+{
+     var sent = getSent();
+     select.Name2.value = sent[0];
+     select.Password2.value = sent[1];
+     select.Server2.value = sent[2];
+     document.getElementById("select").submit();
+}
+
+</script>
+<head>
+    <title>View MySQL</title>
+<style type = "text/css">
+body {
+    background:white;
+    margin: 44px
+}
+div#home {
+    background:gray;
+    color:white;
+    padding:8px;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:5%
+}
+div#head {
+    background:black;
+    color:white;
+    padding:8px;
+    text-align:center;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%
+}
+</style>
+</head>
+<body>
+
+<div id = "head"><b>VIEW MySQL</b></div>
+<div id = "home"><a href="http://10.150.12.175/default.html">HOME</a></div>
+<p align = "center"><u><b>View MySQL tools here</b></u></p>
+
+<form id = "select" action="http://10.150.12.175/webpage.php">
+<p align = "center"><b>Type:</b> <select name="types", id = "types" onchange = "display(this)">
+<option value="">Select one</option>
+<option value="users">Users</option>
+<option value="databases">Databases</option>
+<option value="tables">Tables</option>
+<option value="info">Info</option>
+</select>
+<input type = "button" name = "see"  id = "see" value = "VIEW" onclick = "submitAll3()" style = "visibility:hidden">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "Name2">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "Password2">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "Server2">
+</form>
+
+<form name = "table" id = "table" action = "http://10.150.12.175/webpage.php" style = "visibility:hidden">
+<p align = "center" ><b>Database:</b> <input type = "text" value = "" id = "database" name = "database">
+<input type = "button" value = "VIEW" onclick = "submitAll1()">
+<p align = "center" > <input style = "visibility:hidden" type = "text" value = "" name = "type">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "Name"><a name = "info1"></a>
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "Password">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "Server">
+</form>
+
+<form name = "info" id = "info" action = "http://10.150.12.175/webpage.php" style = "visibility:hidden">
+<p align = "center" ><b>Database:</b> <input type = "text" value = "" id = "database1" name = "database1">
+<p align = "center"> <b>Table:</b> <input type = "text" value = "" id = "table1" name = "table1">
+<input type = "button" value = "VIEW" onclick = "submitAll2()">
+<p align = "center" > <input style = "visibility:hidden" type = "text" value = "" name = "type1">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "Name1">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "Password1">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "Server1">
+</form>
+
+</body>
+</html>

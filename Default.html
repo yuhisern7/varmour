@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset = "utf-8">
+<title>Network Interface</title>
+<script language="JavaScript" type="text/javascript">
+function display(c)
+{
+    if(c.value == "1")
+    {
+        document.getElementById("server").style.visibility = "visible";
+        document.getElementById("mysql").style.visibility = "hidden";
+        document.getElementById("go").style.visibility = "hidden";
+        document.getElementById("action").value = "#";
+    }
+    else if(c.value =="2")
+    {
+        document.getElementById("server").style.visibility = "hidden";
+        document.getElementById("mysql").style.visibility = "visible";
+        document.getElementById("go2").style.visibility = "hidden";
+        document.getElementById("action1").value = "#";
+    }
+    else
+    {
+    }
+}
+
+function display2(c)
+{
+     if(c.value == "http://10.150.12.175/createMySQL.php" || c.value == "http://10.150.12.175/addMySQL.php" || c.value == "http://10.150.12.175/deleteMySQL.php" || c.value == "http://10.150.12.175/viewMySQL.php")
+     {
+         document.getElementById("go").style.visibility = "visible"; 
+     }
+     else
+     {
+         document.getElementById("go").style.visibility = "hidden";
+     }
+}
+
+function display3(c)
+{
+     if(c.value == "http://10.150.12.175/addAddress.php" || c.value == "http://10.150.12.175/changeAddress.php" || c.value == "http://10.150.12.175/deleteAddress.php" || c.value == "http://10.150.12.175/viewAddress.php")
+     {
+         document.getElementById("go2").style.visibility = "visible"; 
+     }
+     else
+     {
+         document.getElementById("go2").style.visibility = "hidden";
+     }
+}
+
+function addLocal(frm)
+{
+    if(frm.server1.value == "")
+        frm.server1.value = "localhost";
+    else if(frm.server1.value == "localhost")
+        frm.server1.value = "";
+}
+
+function submitAll1()
+{
+    var filled = true;
+    var needFill = [];
+    if (mysql.server1.value == "")
+    {    
+        needFill.push("server \n");
+        filled = false;
+    }
+    if (mysql.Name.value == "")
+    {    
+        needFill.push("Name \n");
+        filled = false;
+    }
+    if (mysql.password.value == "")
+    {    
+        needFill.push("password \n");
+        filled = false;
+    }
+    if (needFill.length > 0)
+    {
+        var need = needFill.join("");
+    }
+    if (!filled) {
+        alert("Fill in the following information: \n" + need);
+    }
+    else if (filled) {
+        document.getElementById("mysql").action = document.getElementById("action").value;
+        document.getElementById("action").disabled = true;
+        document.getElementById("mysql").submit();
+        mysql.Name.value = "";
+        document.getElementById("action").disabled = false;
+    }
+}
+
+function submitAll2()
+{
+    if (server.servers.value == "")
+    {
+        alert("Fill in your server information");
+    }
+    else
+    {
+        document.getElementById("server").action = document.getElementById("action1").value;
+        document.getElementById("action1").disabled = true;
+        document.getElementById("server").submit();
+        document.getElementById("action1").disabled = false;
+    }   
+}
+
+</script>
+<style type = "text/css">
+body {
+    background:white;
+    margin: 44px
+}
+div#home {
+    background:gray;
+    color:white;
+    padding:8px;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:5%
+}
+div#head {
+    background:black;
+    color:white;
+    padding:8px;
+    text-align:center;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%
+}
+</style>
+</head>
+<body>
+<div id = "head"><b>NETWORK INTERFACE</b></div>
+<div id = "home"><a href="http://10.150.12.175/default.html">HOME</a></div>
+
+
+
+
+<form id = "type"><p align = "center">
+<input type="radio" name="selection" value="1" onclick = "display(this)"><b>Server</b>
+<input type="radio" name="selection" value="2" onclick = "display(this)"><b>MySQL</b>
+</p>
+<br>
+</form>
+
+<form name = "mysql" method = "post" id = "mysql" style = "visibility:hidden">
+<p align = "center"><b> Name:</b>
+<input type = "text" name = "Name" id = "name" value = "">
+<br>
+<p align = "center"><b> Password: </b>
+<input type = "password" name = "password" id = "passwd">
+<p align = "center"><b> Server: </b>
+<input type = "text" name = "server1" id = "server1"> <input type="button" value="local" onclick = "addLocal(this.form)">
+<p align="center"><b>Select Action</b>
+<select id="action" style="color: #0000FF" size="1" name="action" onchange= "display2(this)">
+<option value="#">Select one</option>
+    <option value="http://10.150.12.175/createMySQL.php">Create</option>
+    <option value="http://10.150.12.175/addMySQL.php">Add</option>
+    <option value="http://10.150.12.175/deleteMySQL.php">Delete</option>
+    <option value="http://10.150.12.175/viewMySQL.php">View</option></select>
+    <input type="button" id = "go" value="GO" onclick = "submitAll1()" style = "visibility:hidden">
+</p>
+</form>
+
+<form name = "server" method = "post" id = "server" style = "visibility:hidden">
+<p align = "center"><b> Server: </b>
+<input type = "text" name = "servers" id = "servers">
+<p align="center"><b>Select Action</b>
+<select id="action1" style="color: #0000FF" size="1" name="action1" onchange= "display3(this)">
+<option value="#">Select one</option>
+    <option value="http://10.150.12.175/addAddress.php">Add</option>
+    <option value="http://10.150.12.175/deleteAddress.php">Delete</option>
+    <option value="http://10.150.12.175/changeAddress.php">Change</option>
+    <option value="http://10.150.12.175/viewAddress.php">View</option></select>
+    <input type="button" id = "go2" value="GO" onclick = "submitAll2()" style = "visibility:hidden">
+</p>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script language="JavaScript" type="text/javascript">
+function displayForm(c)
+{
+    if(c.value == "1")
+    {
+        document.getElementById("file").style.visibility = "visible";
+        document.getElementById("input").style.visibility = "hidden";
+    }
+    else if(c.value =="2")
+    {
+        document.getElementById("file").style.visibility = "hidden";
+        document.getElementById("input").style.visibility = "visible";
+        window.location = document.URL.substring(0,document.URL.indexOf("#")) + '#input1';
+    }
+    else
+    {
+    }
+}
+
+function add()
+{
+    var name = input.Name.value;
+    var okay = false;
+    var unique = true;
+    for(i=0; i<document.getElementById("Names").length; i++)
+    {
+        var val = document.getElementById("Names")[i].value;
+        if(name == val)
+        {
+            unique = false;
+        }
+    }
+    if (name != "" && unique)
+    {
+        okay = true;
+    }
+    if(okay)
+    {
+        var item = name;
+        var newOption = document.createElement("option");
+        newOption.text = item;
+        newOption.value = item;
+        var select = document.getElementById("Names");
+        select.add(newOption); 
+        input.Name.value = "";
+    }
+    else if (!unique)
+    {
+        alert("Change name!");
+        input.Name.value = "";
+    }
+    else 
+    {
+        alert("Fill out the information!");
+    }
+}
+
+function getServer()
+{
+    var url = document.URL;
+    var queryStart = url.indexOf("?") + 1;
+    var queryEnd = url.length;
+    var query = url.slice(queryStart, queryEnd);
+    if (query === url || query === "") return;
+    return query.substring(query.indexOf("=")+1);
+}
+
+function remove()
+{
+  var elSel = document.getElementById('Names');
+  var i;
+  for (i = elSel.length - 1; i>=0; i--)
+  {
+    if (elSel.options[i].selected)
+    {
+      elSel.remove(i);
+    }
+  }
+}
+
+function submitAll1()
+{
+    file.server.value = getServer();
+    document.getElementById("file").submit();
+    file.file2.value = "";
+    document.getElementById("file1").value='';
+}
+
+function submitAll2()
+{
+    input.server1.value = getServer();
+    var select1 = document.getElementById('Names');
+    var val = new Array();
+    for(var i=0; i < select1.options.length; i++)
+    for(var i=0; i < select1.options.length; i++)
+    {
+        val.push(select1.options[i].value);
+    }
+    input.values.value = val.join(";");
+    input.Name.value = "";
+    document.getElementById("Name").disabled = true;
+    document.getElementById("input").submit();
+    document.getElementById("Name").disabled = false;
+}
+</script>
+<head>
+    <title>Delete Address</title>
+<style type = "text/css">
+body {
+    background:white;
+    margin: 44px
+}
+div#home {
+    background:gray;
+    color:white;
+    padding:8px;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:5%
+}
+div#head {
+    background:black;
+    color:white;
+    padding:8px;
+    text-align:center;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%
+}
+</style>
+</head>
+<body>
+
+<div id = "head"><b>DELETE ADDRESS</b></div>
+<div id = "home"><a href="http://10.150.12.175/default.html">HOME</a></div>
+
+<p align = "center"><u><b>Delete your address here</b></u></p>
+
+<form><p align = "center">
+<input type="radio" name="selection" value="1" onclick = "displayForm(this)"><b>File</b>
+<input type="radio" name="selection" value="2" onclick = "displayForm(this)"><b>Input</b><br>
+<br></p>
+</form>
+
+<form name = "file" id = "file" action="http://10.150.12.175/webpageAddress.php" method="get" style = "visibility:hidden" >
+<p align = "center">
+<input type="file" name="file1" id = "file1" accept="audio/*|video/*|image/*|MIME_type">
+<br></p>
+<p align = "center"><b><a name = "input1">Enter file name:</a></b> <input type = "text" name = "file2" value = "">
+<input type="button" value = "DELETE" onclick = "submitAll1()">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "server">
+</form>
+
+<form name = "input" id = "input" action="http://10.150.12.175/webpageAddress.php" method="get" style =  "visibility:hidden">
+<p align = "center"><b>Name:</b> <input type="text" id= "Name"  name="Name" value=""><br>
+
+<p align = "center"><B><u>Names</u></B> <br>
+<p align = "center"><select id="Names" size="4" multiple = "multiple" style="width:300px">
+</SELECT>
+
+<p align = "center"><input type="button" value="ADD" onclick="add()"><input type="button" value="REMOVE" onclick="remove()"><input type="button" value = "DELETE" onclick = "submitAll2()">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "values">
+<p align = "center" ><br> <input style = "visibility:hidden" type = "text" value = "" name = "server1">
+</form>
+
+</body>
+</html>
